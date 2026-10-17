@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+
+# envs
+.venv/
+venv/
+.env
+
+# data, weights, outputs (never commit)
+/datasets/
+/weights/
+runs/
+cache/
+logs/
+*.pt
+*.pth
+*.ckpt
+*.npz
+
+# editor / os
+.DS_Store
+.idea/
+.vscode/
+*.swp

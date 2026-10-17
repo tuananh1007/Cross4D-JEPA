@@ -1,0 +1,26 @@
+# HOI4D per-point semantic segmentation subset (Table 5).
+# In-domain pretraining uses the split==0 clips (--max-clips 500 --epochs 60);
+# scripts/hoi4d_semseg_eval.py runs the per-point linear probe.
+seed: 0
+out_dir: runs/hoi4d_semseg_point4d
+device: cuda
+data:
+  name: hoi4d_semseg
+  root: datasets/hoi4d_semseg_sub.npz
+  num_frames: 24
+  num_points: 2048
+  horizons: [0]
+encoder:
+  name: point4d
+  embed_dim: 256
+  depth: 4
+  num_heads: 4
+teacher:
+  name: dinov2
+loss:
+  vicreg: 1.0
+optim:
+  epochs: 60
+  batch_size: 1
+  base_lr: 0.0005
+  num_workers: 8

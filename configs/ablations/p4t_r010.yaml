@@ -1,0 +1,30 @@
+# Official P4Transformer student, ball-query radius=0.1 (Table 4).
+# Strides are the official ones (spatial 32 -> 64 anchors/frame), so token count and
+# parameters are fixed and only each token's receptive field varies; radius 0.7 is the
+# official setting. Needs the pointnet2 CUDA extension (see README).
+seed: 0
+out_dir: runs/p4t_r010
+device: cuda
+data:
+  name: msr_action3d
+  root: datasets/MSRAction3D
+  num_frames: 24
+  num_points: 2048
+  horizons: [0, 4, 8]
+encoder:
+  name: p4transformer_official
+  embed_dim: 1024
+  depth: 5
+  num_heads: 8
+  spatial_stride: 32
+  temporal_stride: 2
+  radius: 0.1
+teacher:
+  name: dinov2
+loss:
+  vicreg: 1.0
+optim:
+  epochs: 100
+  batch_size: 16
+  base_lr: 0.0005
+  num_workers: 8

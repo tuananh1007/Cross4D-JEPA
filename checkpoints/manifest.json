@@ -1,0 +1,4071 @@
+{
+ "release": "v1.0",
+ "checkpoints": [
+  {
+   "file": "checkpoints/hoi4d_semseg/hoi4d_dense_dinov2_indomain.pt",
+   "archive": "hoi4d_semseg",
+   "dataset": "HOI4D (semseg subset)",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/hoi4d_semseg_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/hoi4d_semseg_point4d.yaml --max-clips 500 --epochs 60 --seed 0 --out runs/hoi4d_dense_dinov2_indomain",
+   "eval_commands": [
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/hoi4d_semseg/hoi4d_dense_dinov2_indomain.pt"
+   ],
+   "sha256": "09b2940714d311a31ddc3a98a6132951d618248bc49561478d0f58d3b917c940",
+   "size_bytes": 13133207,
+   "results": [
+    {
+     "table": 5,
+     "row": "in-domain dense (HOI4D-pretrained)",
+     "column": "mIoU",
+     "metric": "HOI4D per-point linear-probe mIoU (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      23.5917,
+      23.5867,
+      23.5889
+     ]
+    },
+    {
+     "table": 5,
+     "row": "in-domain dense (HOI4D-pretrained)",
+     "column": "mAcc",
+     "metric": "HOI4D per-point linear-probe mAcc (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      32.5074,
+      32.4946,
+      32.5003
+     ]
+    },
+    {
+     "table": 5,
+     "row": "in-domain dense (HOI4D-pretrained)",
+     "column": "OA",
+     "metric": "HOI4D per-point linear-probe OA (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      65.3238,
+      65.3241,
+      65.3245
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/hoi4d_semseg/hoi4d_global_dinov2_indomain.pt",
+   "archive": "hoi4d_semseg",
+   "dataset": "HOI4D (semseg subset)",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/hoi4d_semseg_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/hoi4d_semseg_point4d.yaml --global --max-clips 500 --epochs 60 --seed 0 --out runs/hoi4d_global_dinov2_indomain",
+   "eval_commands": [
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/hoi4d_semseg/hoi4d_global_dinov2_indomain.pt"
+   ],
+   "sha256": "5d25752d7aa0b49190d0fc5d761fdbdb6d94b47c25cf8a066ef0b6a044aaf040",
+   "size_bytes": 13133273,
+   "results": [
+    {
+     "table": 5,
+     "row": "in-domain global (HOI4D-pretrained)",
+     "column": "mIoU",
+     "metric": "HOI4D per-point linear-probe mIoU (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      7.2429,
+      7.2463,
+      7.2466
+     ]
+    },
+    {
+     "table": 5,
+     "row": "in-domain global (HOI4D-pretrained)",
+     "column": "mAcc",
+     "metric": "HOI4D per-point linear-probe mAcc (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      10.7695,
+      10.7726,
+      10.7745
+     ]
+    },
+    {
+     "table": 5,
+     "row": "in-domain global (HOI4D-pretrained)",
+     "column": "OA",
+     "metric": "HOI4D per-point linear-probe OA (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      48.4366,
+      48.4437,
+      48.4725
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/hoi4d_semseg/msr_dense_dinov2_zeroshot.pt",
+   "archive": "hoi4d_semseg",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d_resample32.yaml --seed 0 --out runs/msr_dense_dinov2_zeroshot",
+   "eval_commands": [
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/hoi4d_semseg/msr_dense_dinov2_zeroshot.pt",
+    "for s in 0 1 2; do C4D_SEED=$s python -m cross4d_jepa.engine.finetune configs/msr_point4d_resample32.yaml --encoder checkpoints/hoi4d_semseg/msr_dense_dinov2_zeroshot.pt --epochs 150 --no-augment --label-fraction 1.0; done"
+   ],
+   "sha256": "a97508ce5e0b4be7536584b6eca22c6621457efc3033869fa94fd5e8413ad541",
+   "size_bytes": 13133011,
+   "results": [
+    {
+     "table": 5,
+     "row": "zero-shot dense (MSR-pretrained)",
+     "column": "mIoU",
+     "metric": "HOI4D per-point linear-probe mIoU (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      16.176,
+      16.175,
+      16.1713
+     ]
+    },
+    {
+     "table": 5,
+     "row": "zero-shot dense (MSR-pretrained)",
+     "column": "mAcc",
+     "metric": "HOI4D per-point linear-probe mAcc (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      21.3735,
+      21.3729,
+      21.3668
+     ]
+    },
+    {
+     "table": 5,
+     "row": "zero-shot dense (MSR-pretrained)",
+     "column": "OA",
+     "metric": "HOI4D per-point linear-probe OA (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      59.3509,
+      59.3538,
+      59.3492
+     ]
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (fine-tuned)",
+     "column": "acc. (%)",
+     "metric": "MSR end-to-end fine-tune best test acc, label_frac=1.0, 150 ep, no-augment; per FT seed (C4D_SEED=0,1,2)",
+     "value": [
+      0.9127,
+      0.92,
+      0.9236
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/hoi4d_semseg/msr_global_dinov2_zeroshot.pt",
+   "archive": "hoi4d_semseg",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d_resample32.yaml --global --seed 0 --out runs/msr_global_dinov2_zeroshot",
+   "eval_commands": [
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/hoi4d_semseg/msr_global_dinov2_zeroshot.pt"
+   ],
+   "sha256": "5e5bac6b0e508c568ef55c19c408ebcdbf3b286a78c64de40610d197a23a45ea",
+   "size_bytes": 13133077,
+   "results": [
+    {
+     "table": 5,
+     "row": "zero-shot global (MSR-pretrained)",
+     "column": "mIoU",
+     "metric": "HOI4D per-point linear-probe mIoU (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      4.3578,
+      4.3687,
+      4.3601
+     ]
+    },
+    {
+     "table": 5,
+     "row": "zero-shot global (MSR-pretrained)",
+     "column": "mAcc",
+     "metric": "HOI4D per-point linear-probe mAcc (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      7.1497,
+      7.1683,
+      7.1536
+     ]
+    },
+    {
+     "table": 5,
+     "row": "zero-shot global (MSR-pretrained)",
+     "column": "OA",
+     "metric": "HOI4D per-point linear-probe OA (%), frozen encoder; per probe-head seed 0,1,2",
+     "value": [
+      43.623,
+      43.7306,
+      43.6321
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_dense_s0.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --seed 0 --out runs/p4t_r070_dense_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_dense_s0.pt"
+   ],
+   "sha256": "3dc6aec73066051ac0acd7a7db458045797ca52f18e52025fda5b01843fb3bec",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6473
+    },
+    {
+     "table": 4,
+     "row": "P4T radius 0.70 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6473
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_dense_s1.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --seed 1 --out runs/p4t_r070_dense_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_dense_s1.pt"
+   ],
+   "sha256": "680f8ebf463f3c4f8d8ab1c42521733276ee830e45d4e26a5a31d83ee58be4cf",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5673
+    },
+    {
+     "table": 4,
+     "row": "P4T radius 0.70 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5673
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_dense_s2.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --seed 2 --out runs/p4t_r070_dense_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_dense_s2.pt"
+   ],
+   "sha256": "120715d3d9305fde9b8e96477757c11fc34b492be2b0298ce38fd926a87a00e8",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6255
+    },
+    {
+     "table": 4,
+     "row": "P4T radius 0.70 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_dense_s3.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --seed 3 --out runs/p4t_r070_dense_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_dense_s3.pt"
+   ],
+   "sha256": "3316d86c3d36fb3208c2547899c29c7a4236feeb7b0b96e121d65132b095e79c",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6255
+    },
+    {
+     "table": 4,
+     "row": "P4T radius 0.70 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_dense_s4.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --seed 4 --out runs/p4t_r070_dense_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_dense_s4.pt"
+   ],
+   "sha256": "2f175abe5e0a7887a27b9504717a6fc298eb633c9b6f1c2385f92abd5cb24f42",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6182
+    },
+    {
+     "table": 4,
+     "row": "P4T radius 0.70 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6182
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_global_s0.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --global --seed 0 --out runs/p4t_r070_global_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_global_s0.pt"
+   ],
+   "sha256": "7e74e8f0f5a201cfba01ac551cb4ea8b8c2a1c4dae3c87af837e980bddcf9ba1",
+   "size_bytes": 168008325,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_global_s1.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --global --seed 1 --out runs/p4t_r070_global_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_global_s1.pt"
+   ],
+   "sha256": "297dcfdbe91e5f3ba7f7cf47ca71bdb06cc8e8e123a37528995ecafaed2b8f3b",
+   "size_bytes": 168008325,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3891
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_global_s2.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --global --seed 2 --out runs/p4t_r070_global_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_global_s2.pt"
+   ],
+   "sha256": "ae047ad75244b756a2a6058c6786eba191eb92502b304f3e5faed17e56590ce3",
+   "size_bytes": 168008325,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3418
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_global_s3.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --global --seed 3 --out runs/p4t_r070_global_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_global_s3.pt"
+   ],
+   "sha256": "6b660d52c7e10863cd525fb8a59658d736101c108560c8532782e831404c090d",
+   "size_bytes": 168008325,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3527
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_r070/p4t_r070_global_s4.pt",
+   "archive": "locality_p4t_r070",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/ablations/p4t_r070.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r070.yaml --global --seed 4 --out runs/p4t_r070_global_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r070.yaml --encoder checkpoints/locality_p4t_r070/p4t_r070_global_s4.pt"
+   ],
+   "sha256": "5f2eacdd059ac6fbfe7341238712b4798bb4823f79c5a1df975805f5f5394eab",
+   "size_bytes": 168008325,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4Transformer (42M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3964
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r010_dense_s0.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/p4t_r010.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r010.yaml --seed 0 --out runs/p4t_r010_dense_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r010.yaml --encoder checkpoints/locality_p4t_radius/p4t_r010_dense_s0.pt"
+   ],
+   "sha256": "493e19d5af1502a163b9fc2b7f376441f66d3aad7da27de2a92e8219f7e6741d",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.10 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5673
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r010_dense_s1.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/p4t_r010.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r010.yaml --seed 1 --out runs/p4t_r010_dense_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r010.yaml --encoder checkpoints/locality_p4t_radius/p4t_r010_dense_s1.pt"
+   ],
+   "sha256": "a2112cd0666652aba027da82a7f0ea18823e2010bf403c446a3c9f359d3269e3",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.10 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5855
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r010_dense_s2.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/p4t_r010.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r010.yaml --seed 2 --out runs/p4t_r010_dense_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r010.yaml --encoder checkpoints/locality_p4t_radius/p4t_r010_dense_s2.pt"
+   ],
+   "sha256": "775d0ffb08af7a9fe9acd8646fe161687ace33bec0014397181bd7f4feff2c7f",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.10 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5782
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r020_dense_s0.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/p4t_r020.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r020.yaml --seed 0 --out runs/p4t_r020_dense_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r020.yaml --encoder checkpoints/locality_p4t_radius/p4t_r020_dense_s0.pt"
+   ],
+   "sha256": "581c720740576aa164b366c6b1dbeb2214f7aebab724f23b4cadd9bae900b74a",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.20 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6727
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r020_dense_s1.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/p4t_r020.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r020.yaml --seed 1 --out runs/p4t_r020_dense_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r020.yaml --encoder checkpoints/locality_p4t_radius/p4t_r020_dense_s1.pt"
+   ],
+   "sha256": "dcb724664631624eb4f198644002c735a41e6dcd891ca8b473b840d85f48848d",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.20 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.72
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r020_dense_s2.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/p4t_r020.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r020.yaml --seed 2 --out runs/p4t_r020_dense_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r020.yaml --encoder checkpoints/locality_p4t_radius/p4t_r020_dense_s2.pt"
+   ],
+   "sha256": "fc5cd5bb11c9bb4689bd2f809bef16c6bad78214b19a706994ac840a1ef4209e",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.20 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6364
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r040_dense_s0.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/p4t_r040.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r040.yaml --seed 0 --out runs/p4t_r040_dense_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r040.yaml --encoder checkpoints/locality_p4t_radius/p4t_r040_dense_s0.pt"
+   ],
+   "sha256": "eb9dc31e88d409f47fc553134c4d79d953b0027c02b66403c32c6660e63dab4d",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.40 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r040_dense_s1.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/p4t_r040.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r040.yaml --seed 1 --out runs/p4t_r040_dense_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r040.yaml --encoder checkpoints/locality_p4t_radius/p4t_r040_dense_s1.pt"
+   ],
+   "sha256": "f0a8d932bcdd2b67691705cc0e31b99bdf35afdb65fc5f88b0064338eb223955",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.40 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5891
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_p4t_radius/p4t_r040_dense_s2.pt",
+   "archive": "locality_p4t_radius",
+   "dataset": "MSR-Action3D",
+   "backbone": "p4transformer_official",
+   "params": 41995264,
+   "needs_pointnet2": true,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/p4t_r040.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/p4t_r040.yaml --seed 2 --out runs/p4t_r040_dense_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/p4t_r040.yaml --encoder checkpoints/locality_p4t_radius/p4t_r040_dense_s2.pt"
+   ],
+   "sha256": "c057a87db69973abb720756343dceb3fa0326d850a0de5fb0e93ebcf586d2f66",
+   "size_bytes": 168008259,
+   "results": [
+    {
+     "table": 4,
+     "row": "P4T radius 0.40 [bottom]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n16_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --seed 0 --out runs/msr_dense_n16_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_dense_n16_s0.pt"
+   ],
+   "sha256": "928433845e7521045d202f001e005e18874fa635d5edc42aee0c6f3b823ca6bb",
+   "size_bytes": 13132289,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n16_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --seed 1 --out runs/msr_dense_n16_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_dense_n16_s1.pt"
+   ],
+   "sha256": "538c19ece77f3869b55fc162cef72312505cb3ad7919cb2ee4b5fd24388032ae",
+   "size_bytes": 13132289,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8582
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n16_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --seed 2 --out runs/msr_dense_n16_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_dense_n16_s2.pt"
+   ],
+   "sha256": "6d0eb7b892ee6b416db056200da5ba9ebaf9fb4ddeaf0203f5c96e12218fda8b",
+   "size_bytes": 13132289,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n1_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --seed 0 --out runs/msr_dense_n1_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_dense_n1_s0.pt"
+   ],
+   "sha256": "326c5dfa3384588333cc2713dce0cb404c6277c3c3d17479ddbb80af1a31bf1b",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n1_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --seed 1 --out runs/msr_dense_n1_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_dense_n1_s1.pt"
+   ],
+   "sha256": "ae2409503647388b9d977475e25df0abcbeedec7ad538c252af5011993832499",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5345
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n1_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --seed 2 --out runs/msr_dense_n1_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_dense_n1_s2.pt"
+   ],
+   "sha256": "ccfc78feb706b571f06436f8c3752e34e2a3d7534fa3a98492206d3af6e410dc",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5127
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n2_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --seed 0 --out runs/msr_dense_n2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_dense_n2_s0.pt"
+   ],
+   "sha256": "790234d2c84add78cc2defcf719f79735f73d1e3529e85a2bdd167f8415e9bbb",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7018
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n2_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --seed 1 --out runs/msr_dense_n2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_dense_n2_s1.pt"
+   ],
+   "sha256": "b136f456119d392b5cdc704549fa3d95f6500def3841c3480c0ffa4fad5e3bab",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7455
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n2_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --seed 2 --out runs/msr_dense_n2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_dense_n2_s2.pt"
+   ],
+   "sha256": "320c7e01c5309c1b9324322ddab912ae385b48451eec539654ff726a29ffaa79",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.76
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n4_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --seed 0 --out runs/msr_dense_n4_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_dense_n4_s0.pt"
+   ],
+   "sha256": "c1c6ae930c71224acef043c846129a301998978bbfd82f18e1e0614a1cecce54",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n4_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --seed 1 --out runs/msr_dense_n4_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_dense_n4_s1.pt"
+   ],
+   "sha256": "80049ab5302c58fde887d956ff93846fc83712b98dbe7bb4fa7a4e4528d5b31e",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8545
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_dense_n4_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --seed 2 --out runs/msr_dense_n4_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_dense_n4_s2.pt"
+   ],
+   "sha256": "dcd4c5e8f86ab3d11ce9d3d4bb03de1e0c5bf2d2352dc93f89344e93df18fb36",
+   "size_bytes": 13132223,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8364
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n16_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --global --seed 0 --out runs/msr_global_n16_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_global_n16_s0.pt"
+   ],
+   "sha256": "7433f5263a0f0a45e4403a70d7cb372f5c73bd795f5785dd2e7835489896623c",
+   "size_bytes": 13132419,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5709
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n16_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --global --seed 1 --out runs/msr_global_n16_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_global_n16_s1.pt"
+   ],
+   "sha256": "2de316f17269b87f59a0d8e2709ff9372e5379c48b0cd25e60cf8af4d07e7f7f",
+   "size_bytes": 13132419,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n16_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ablations/gran_n16.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n16.yaml --global --seed 2 --out runs/msr_global_n16_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n16.yaml --encoder checkpoints/locality_point4d/msr_global_n16_s2.pt"
+   ],
+   "sha256": "d9ea4b7e91bcd9ef186807b922f92fbcd073399a3498fbfc530ee9d79f779678",
+   "size_bytes": 13132419,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=16 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5418
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n1_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --global --seed 0 --out runs/msr_global_n1_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_global_n1_s0.pt"
+   ],
+   "sha256": "bf356604c9f44f2b5118f5967865086f900773e5783a75bd0cd38e4500c86b9e",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4545
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n1_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --global --seed 1 --out runs/msr_global_n1_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_global_n1_s1.pt"
+   ],
+   "sha256": "d1f0b095e3011e788b795802a5e5656723c5ecc371bbbc9307a37d880aae27b4",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4691
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n1_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ablations/gran_n1.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n1.yaml --global --seed 2 --out runs/msr_global_n1_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n1.yaml --encoder checkpoints/locality_point4d/msr_global_n1_s2.pt"
+   ],
+   "sha256": "a1a33d3eca76e0b16ec41c69cec14a63ea3015b11d637a9198c070aeef2f8b6a",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=1 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n2_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --global --seed 0 --out runs/msr_global_n2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_global_n2_s0.pt"
+   ],
+   "sha256": "2c668d18128d09b590f2feb29ac5726a63f27a8c65a7fd41f32c90961fb5b53c",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5273
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n2_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --global --seed 1 --out runs/msr_global_n2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_global_n2_s1.pt"
+   ],
+   "sha256": "2171a0c73f1b88fd2d58941fea7a3a5d6ca94ed9e4e4fdf3723f04d63c988d36",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4982
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n2_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ablations/gran_n2.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n2.yaml --global --seed 2 --out runs/msr_global_n2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n2.yaml --encoder checkpoints/locality_point4d/msr_global_n2_s2.pt"
+   ],
+   "sha256": "028748577c652ecdd351bc365f1c9f0028454c09515d27881a40a5fc4e6ebc85",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=2 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4909
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n4_s0.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --global --seed 0 --out runs/msr_global_n4_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_global_n4_s0.pt"
+   ],
+   "sha256": "ef8fdc4b80fe0c2b080b4d2862a697a7928e19b28597d2d017211be1ef8e1c4a",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6327
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n4_s1.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --global --seed 1 --out runs/msr_global_n4_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_global_n4_s1.pt"
+   ],
+   "sha256": "62504cacc050087cfd16646313e92b732911cebae5fd13ce3b7f891029490ed8",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5782
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/locality_point4d/msr_global_n4_s2.pt",
+   "archive": "locality_point4d",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ablations/gran_n4.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ablations/gran_n4.yaml --global --seed 2 --out runs/msr_global_n4_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ablations/gran_n4.yaml --encoder checkpoints/locality_point4d/msr_global_n4_s2.pt"
+   ],
+   "sha256": "a33b74d1ba0577b3953eccf2d1586589afe4f66eb9cf41b7fe50fa2f3b89aa5f",
+   "size_bytes": 13132353,
+   "results": [
+    {
+     "table": 4,
+     "row": "n2=4 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4691
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_dense_vjepa2_s0.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --seed 0 --out runs/dt4d_dense_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_dense_vjepa2_s0.pt"
+   ],
+   "sha256": "ce33c8d64978a9a9985286419e3add491fbe1af1a241d56c48106df1bdc4e930",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4735
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_dense_vjepa2_s1.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --seed 1 --out runs/dt4d_dense_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_dense_vjepa2_s1.pt"
+   ],
+   "sha256": "ee672fefa8fccb797ce7d022b1d6b674d13fa4545243d59c6ad304e18802fbd4",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.507
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_dense_vjepa2_s2.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --seed 2 --out runs/dt4d_dense_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_dense_vjepa2_s2.pt"
+   ],
+   "sha256": "ab9932b3900a94b6fad455e1e4e73a4561a10af7e77eb139ebd5ab2d8eb7e4fe",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5404
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_dense_vjepa2_s3.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --seed 3 --out runs/dt4d_dense_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_dense_vjepa2_s3.pt"
+   ],
+   "sha256": "fd73b07b8266cfab24edb3e0665e2552cf69be584d5d3cf944ce0c6a31a4a148",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5292
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_dense_vjepa2_s4.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --seed 4 --out runs/dt4d_dense_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_dense_vjepa2_s4.pt"
+   ],
+   "sha256": "8ce2bd1fc45984ccf030b0d16ea282e4322ef2ad74458986ed84e220fc4b3255",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5292
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_global_vjepa2_s0.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --global --seed 0 --out runs/dt4d_global_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_global_vjepa2_s0.pt"
+   ],
+   "sha256": "cebaec25efa9c1d0771b4d3b101a71a902cd39032d0a6e0be7444b8332a02803",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3482
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_global_vjepa2_s1.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --global --seed 1 --out runs/dt4d_global_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_global_vjepa2_s1.pt"
+   ],
+   "sha256": "dd2d9e3182bd73c09f1ea3358337e8c3dfe2372f84e6bef4124c16e9f735e957",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3343
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_global_vjepa2_s2.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --global --seed 2 --out runs/dt4d_global_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_global_vjepa2_s2.pt"
+   ],
+   "sha256": "6c99fa0f07f9cf4a9ae579da14117b31b4c2736df02321a8162dfd1d904f8513",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3148
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_global_vjepa2_s3.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --global --seed 3 --out runs/dt4d_global_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_global_vjepa2_s3.pt"
+   ],
+   "sha256": "21d1a0001e90d1ae16c4578c72e50a37099d1353ee51c792bf11535aa5192e07",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3315
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/dt4d_global_vjepa2_s4.pt",
+   "archive": "main",
+   "dataset": "DeformingThings4D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/dt4d_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/dt4d_point4d.yaml --global --seed 4 --out runs/dt4d_global_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/dt4d_point4d.yaml --encoder checkpoints/main/dt4d_global_vjepa2_s4.pt"
+   ],
+   "sha256": "6eeca62b1cd247120d9b1291bd7a6cdaa1cb4b9fe4d602b358ee437876e6c8b7",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 1,
+     "row": "DeformingThings4D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3426
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_dense_dinov2_s0.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --seed 0 --out runs/msr_dense_dinov2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s0.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s0.pt"
+   ],
+   "sha256": "4d34b18832a2c3a691a6b76e2429fa77bbbd5f9c993afa362bb02bfbc4a3b56d",
+   "size_bytes": 13132487,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L (ours)",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (dense)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      16.6488,
+      16.6475,
+      16.6582
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_dense_dinov2_s1.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --seed 1 --out runs/msr_dense_dinov2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s1.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s1.pt"
+   ],
+   "sha256": "a76ffeded46f18177e8e90917f85b39b47b132020b6795612ab8b06bbf7da6eb",
+   "size_bytes": 13132487,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L (ours)",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (dense)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      16.3602,
+      16.3545,
+      16.351
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_dense_dinov2_s2.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --seed 2 --out runs/msr_dense_dinov2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s2.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s2.pt"
+   ],
+   "sha256": "c20402a2148b5b0e39a69a67b108bc499ce9358e8b50debc98466dbbe6133433",
+   "size_bytes": 13132487,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L (ours)",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (dense)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8436
+    },
+    {
+     "table": 3,
+     "row": "DINOv2-L",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      16.8019,
+      16.8307,
+      16.8128
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_dense_dinov2_s3.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --seed 3 --out runs/msr_dense_dinov2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s3.pt"
+   ],
+   "sha256": "e337b63df3fc7380af108e663c9102d5941503cb19c8a06b46afc82dbf2b9ee6",
+   "size_bytes": 13132487,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7927
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7927
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7927
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (dense)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7927
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_dense_dinov2_s4.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --seed 4 --out runs/msr_dense_dinov2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_dense_dinov2_s4.pt"
+   ],
+   "sha256": "d95333222c549fac8003cf1d871b81410536f4b94db3d8da6463e71fec8e3a4d",
+   "size_bytes": 13132487,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8145
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8145
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "dense",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8145
+    },
+    {
+     "table": 6,
+     "row": "Cross4D-JEPA (dense)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8145
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s0.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 0 --out runs/msr_global_dinov2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s0.pt"
+   ],
+   "sha256": "42b859bbf4831af8890d98b7d748851adc11f014044d796476e48d4ed7ba4533",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4582
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4582
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4582
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4582
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s1.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 1 --out runs/msr_global_dinov2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s1.pt"
+   ],
+   "sha256": "f2dc1c7355c3de226d20304946b7fb77ee0cd7cf119de36abe8ad67b97f072ed",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5818
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5818
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5818
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5818
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s2.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 2 --out runs/msr_global_dinov2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s2.pt"
+   ],
+   "sha256": "b5923837f60810e37d7718be1508c82a8e09b056e223e5d50480149d255b2406",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5091
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s3.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 3 --out runs/msr_global_dinov2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s3.pt"
+   ],
+   "sha256": "af4fd537a9f576de12ebfa86e300f0b9552dd473f6677edccea7fea381ec7971",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5745
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5745
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5745
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5745
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s4.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 4 --out runs/msr_global_dinov2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s4.pt"
+   ],
+   "sha256": "b4a1eb28585ccfbd6ede415d2905d0b2a2916ce9e8e8f9a72886d55e586a3205",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5055
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5055
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5055
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5055
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s5.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 5,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 5 --out runs/msr_global_dinov2_s5",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s5.pt"
+   ],
+   "sha256": "4ddd58a0f677c7bedfbd68928c071e3ac34a1ffe48c093f4a87789ee39be6690",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4836
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4836
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4836
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4836
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s6.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 6,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 6 --out runs/msr_global_dinov2_s6",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s6.pt"
+   ],
+   "sha256": "96e070ee9e7711404689126096e32c8d7ff3f905282ad08e431711f1c262d92b",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5636
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5636
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5636
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5636
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/msr_global_dinov2_s7.pt",
+   "archive": "main",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov2",
+   "mode": "global",
+   "seed": 7,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --seed 7 --out runs/msr_global_dinov2_s7",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/main/msr_global_dinov2_s7.pt"
+   ],
+   "sha256": "1f414e00dceab776d3858a34df774516610b057686d6255bd5d530d6f003a8e6",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "MSR-Action3D",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    },
+    {
+     "table": 2,
+     "row": "DINOv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    },
+    {
+     "table": 4,
+     "row": "Point4D (3.3M) [top]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    },
+    {
+     "table": 4,
+     "row": "n2=64 [middle]",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_dense_vjepa2_s0.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --max-clips 1000 --epochs 100 --seed 0 --out runs/ntu_dense_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_dense_vjepa2_s0.pt"
+   ],
+   "sha256": "785ee5d63773dba1c12caff475c67f30eaa918c6fbb2d62dc4f86984bada9adb",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4546
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_dense_vjepa2_s1.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --max-clips 1000 --epochs 100 --seed 1 --out runs/ntu_dense_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_dense_vjepa2_s1.pt"
+   ],
+   "sha256": "351ef277d23ffd6f75c478f13c541960941cb151776e285bbbf7b7943fe36814",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4819
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_dense_vjepa2_s2.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --max-clips 1000 --epochs 100 --seed 2 --out runs/ntu_dense_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_dense_vjepa2_s2.pt"
+   ],
+   "sha256": "89064093120167b54a4f7d10cb08ac1ee7f0703ef22b6f28f482951adf289f35",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4696
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_dense_vjepa2_s3.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --max-clips 1000 --epochs 100 --seed 3 --out runs/ntu_dense_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_dense_vjepa2_s3.pt"
+   ],
+   "sha256": "18ecab82cd6e4462b34545f9304b6f48fd0192e7e7ea043f5202f8b898600456",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4711
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_dense_vjepa2_s4.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --max-clips 1000 --epochs 100 --seed 4 --out runs/ntu_dense_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_dense_vjepa2_s4.pt"
+   ],
+   "sha256": "930d9df8e46828aa54dc904da75832cdb47801b8bd2a4da812461b1c98e584db",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.4743
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_global_vjepa2_s0.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --global --max-clips 1000 --epochs 100 --seed 0 --out runs/ntu_global_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_global_vjepa2_s0.pt"
+   ],
+   "sha256": "7c9d7786710d55d4b27ee79c8a0e9e4e90395fdf5ec40455dd45a2a4247cc35d",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.2618
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_global_vjepa2_s1.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --global --max-clips 1000 --epochs 100 --seed 1 --out runs/ntu_global_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_global_vjepa2_s1.pt"
+   ],
+   "sha256": "9885f126268a65068fe3a94c28400a1365501eaf40b97a67f881046b78240c4b",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.2048
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_global_vjepa2_s2.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --global --max-clips 1000 --epochs 100 --seed 2 --out runs/ntu_global_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_global_vjepa2_s2.pt"
+   ],
+   "sha256": "ff61958cd4361e13f41c71a37941ce7b91a4b3a458320a304a93532ad7ce2df9",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.1983
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_global_vjepa2_s3.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --global --max-clips 1000 --epochs 100 --seed 3 --out runs/ntu_global_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_global_vjepa2_s3.pt"
+   ],
+   "sha256": "753b4c781655556a4eb3bf28a684f4e2b1eb813eb6794675d374cdd5920e603f",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.1542
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/main/ntu_global_vjepa2_s4.pt",
+   "archive": "main",
+   "dataset": "NTU RGB+D 60",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/ntu_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/ntu_point4d.yaml --global --max-clips 1000 --epochs 100 --seed 4 --out runs/ntu_global_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/ntu_point4d.yaml --encoder checkpoints/main/ntu_global_vjepa2_s4.pt"
+   ],
+   "sha256": "b34bd7167f27c4bb9186fba0274427dcd704599ebda277a803f68c18e7c0f8bb",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 1,
+     "row": "NTU-RGB+D 60",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.2088
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_dinov3_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher dinov3 --seed 0 --out runs/msr_dense_dinov3_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_dinov3_s0.pt"
+   ],
+   "sha256": "72a77f984aaf365134d57b010b0c8d1b4faef9ead36a78f5c50acb64193a0c66",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8291
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_dinov3_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher dinov3 --seed 1 --out runs/msr_dense_dinov3_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_dinov3_s1.pt"
+   ],
+   "sha256": "7d494e403f782b5556ea5179a38b70cd990fcd36ae66be16783e6a2effa9810b",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8582
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_dinov3_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher dinov3 --seed 2 --out runs/msr_dense_dinov3_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_dinov3_s2.pt"
+   ],
+   "sha256": "986e1b151803045a98206baac4ab1dfcce12798f9b237f2c32b285608577f94f",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8582
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_dinov3_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher dinov3 --seed 3 --out runs/msr_dense_dinov3_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_dinov3_s3.pt"
+   ],
+   "sha256": "c0c39767987d9833aadc90094a46b37582ef7e48ecdd13e6ee60a276581747d9",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8291
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_dinov3_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher dinov3 --seed 4 --out runs/msr_dense_dinov3_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_dinov3_s4.pt"
+   ],
+   "sha256": "dda900cbda8351df318a9b5e6affa647d3bb412e509cff0daf105918468b0a53",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.88
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_videomaev2_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher videomaev2 --seed 0 --out runs/msr_dense_videomaev2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_videomaev2_s0.pt"
+   ],
+   "sha256": "3a1cfa38d2d2256e0d45041e469ba39e6c9723e98dc1958bd39f7d73bc94d118",
+   "size_bytes": 13132879,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7964
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_videomaev2_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher videomaev2 --seed 1 --out runs/msr_dense_videomaev2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_videomaev2_s1.pt"
+   ],
+   "sha256": "602d8b525c4215731f83c587b51a970f37b34a9368ec4ebfadaff3e4a1e3a08a",
+   "size_bytes": 13132879,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_videomaev2_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher videomaev2 --seed 2 --out runs/msr_dense_videomaev2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_videomaev2_s2.pt"
+   ],
+   "sha256": "5ac4e90e8aba769a8aa6b55646a32fdbcad6285070cf7083b74c3e63e6c023b6",
+   "size_bytes": 13132879,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_videomaev2_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher videomaev2 --seed 3 --out runs/msr_dense_videomaev2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_videomaev2_s3.pt"
+   ],
+   "sha256": "e34740566e89dc70e733e91c23fd6e1fcf723269a9b5e78d03eef7ccc91b4d0a",
+   "size_bytes": 13132879,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8145
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_videomaev2_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher videomaev2 --seed 4 --out runs/msr_dense_videomaev2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_videomaev2_s4.pt"
+   ],
+   "sha256": "2cac521ad546905c45894aaaed30f4da4f5231016bcaed33873a706e13203d4f",
+   "size_bytes": 13132879,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8655
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_vjepa2_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vjepa2 --seed 0 --out runs/msr_dense_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_vjepa2_s0.pt"
+   ],
+   "sha256": "83eb861ca0dc7419f29e5d62fd112b091e88f125a9e5b24bb31e813e815a94e7",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8509
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_vjepa2_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vjepa2 --seed 1 --out runs/msr_dense_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_vjepa2_s1.pt"
+   ],
+   "sha256": "bd140e1b16bdc08da88bd8c7e07a33dc6fe2e19f2752270452cd95aecd6d5251",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8727
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_vjepa2_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vjepa2 --seed 2 --out runs/msr_dense_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_vjepa2_s2.pt"
+   ],
+   "sha256": "6096457ab074bb90b5deb6b72ff5ad98b8bd8f573ee9dedce172944e12d5474e",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8255
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_vjepa2_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vjepa2 --seed 3 --out runs/msr_dense_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_vjepa2_s3.pt"
+   ],
+   "sha256": "7a5abe9902f6d0b1966c23408037b7e7612d3864df7421e343f86622053fe4a1",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.88
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_dense_vjepa2_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "dense",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vjepa2 --seed 4 --out runs/msr_dense_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_dense_vjepa2_s4.pt"
+   ],
+   "sha256": "5d9b611b4c6126cc35806e6d0329404f3be3ecb762bf046a1f496c646c4eddf4",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "dense (ours)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8291
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_dinov3_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher dinov3 --seed 0 --out runs/msr_global_dinov3_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_dinov3_s0.pt"
+   ],
+   "sha256": "0bfd90d034ea393fe3cc0acb8d0844b804cdd8e93b8dd83ba22d890e92730891",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6873
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_dinov3_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher dinov3 --seed 1 --out runs/msr_global_dinov3_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_dinov3_s1.pt"
+   ],
+   "sha256": "b7ac7ad8979888599b80c71dfca48a2be18a26a1cdd19e854002197bb7169046",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6327
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_dinov3_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher dinov3 --seed 2 --out runs/msr_global_dinov3_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_dinov3_s2.pt"
+   ],
+   "sha256": "2ee1d110f9c85ce887d4012c53a1a935450c6d043119df0db1663dec8b9caa85",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5782
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_dinov3_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher dinov3 --seed 3 --out runs/msr_global_dinov3_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_dinov3_s3.pt"
+   ],
+   "sha256": "3dd683dfefc2d0fdd4eb51df3af84684e203240a4698be1fa018de3089c45b2d",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5745
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_dinov3_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "dinov3",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher dinov3 --seed 4 --out runs/msr_global_dinov3_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_dinov3_s4.pt"
+   ],
+   "sha256": "a7661013f904afd04f584e3ab3bdb298b32c9609167d4f7a86a9d54acaf6b26e",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "DINOv3",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6909
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_videomaev2_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher videomaev2 --seed 0 --out runs/msr_global_videomaev2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_videomaev2_s0.pt"
+   ],
+   "sha256": "6e1505183c2edba496c4ab745473bc337e4e1df10a4345365d87ef90788f88ca",
+   "size_bytes": 13132945,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_videomaev2_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher videomaev2 --seed 1 --out runs/msr_global_videomaev2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_videomaev2_s1.pt"
+   ],
+   "sha256": "04df2ab0979a4f3e04bb3d608d8bdea0a95730f02836a23bfc1a326c938023ea",
+   "size_bytes": 13132945,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6182
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_videomaev2_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher videomaev2 --seed 2 --out runs/msr_global_videomaev2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_videomaev2_s2.pt"
+   ],
+   "sha256": "688c785c3e0cf04b0e4f112040bab7beca49e23bf86d9511e6b8264cb03a7246",
+   "size_bytes": 13132945,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.64
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_videomaev2_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher videomaev2 --seed 3 --out runs/msr_global_videomaev2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_videomaev2_s3.pt"
+   ],
+   "sha256": "e6ea8456e532d0cced0bb57ac28f503285ecccf91fe1def0d4d708888d7dd6f8",
+   "size_bytes": 13132945,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.56
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_videomaev2_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "videomaev2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher videomaev2 --seed 4 --out runs/msr_global_videomaev2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_videomaev2_s4.pt"
+   ],
+   "sha256": "4c2a81f4302e96bb5762553285aa64e3803712e49644214da96f358f395d1371",
+   "size_bytes": 13132945,
+   "results": [
+    {
+     "table": 2,
+     "row": "VideoMAEv2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6836
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_vjepa2_s0.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher vjepa2 --seed 0 --out runs/msr_global_vjepa2_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_vjepa2_s0.pt"
+   ],
+   "sha256": "3972c0cfc232c98bf8c404e9487275f3ee86dfb3d90268c83013110ece018a77",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5127
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_vjepa2_s1.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher vjepa2 --seed 1 --out runs/msr_global_vjepa2_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_vjepa2_s1.pt"
+   ],
+   "sha256": "53ddd05e27f8687c5e5bfa5874b8aab436a825c8aa55ac97ddc324471861865a",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5818
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_vjepa2_s2.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher vjepa2 --seed 2 --out runs/msr_global_vjepa2_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_vjepa2_s2.pt"
+   ],
+   "sha256": "25e8c5f719b6c80ee8252aa7e0300b81db9cf22c27ab0fd8e489cfb1516e5161",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5709
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_vjepa2_s3.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 3,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher vjepa2 --seed 3 --out runs/msr_global_vjepa2_s3",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_vjepa2_s3.pt"
+   ],
+   "sha256": "654b3161ca9b60bb9b56ff3e286cd1c5ae534274300429bb4207d668493949c5",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5709
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/modality/msr_global_vjepa2_s4.pt",
+   "archive": "modality",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vjepa2",
+   "mode": "global",
+   "seed": 4,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --global --teacher vjepa2 --seed 4 --out runs/msr_global_vjepa2_s4",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/modality/msr_global_vjepa2_s4.pt"
+   ],
+   "sha256": "b8a5268fa390f3a4e4bbaf97e74cf981d5094edc9220500fb9303201987e73c7",
+   "size_bytes": 13132617,
+   "results": [
+    {
+     "table": 2,
+     "row": "V-JEPA 2",
+     "column": "global",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_ijepa_e300_s0.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "ijepa",
+   "seed": 0,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_ijepa configs/msr_point4d_resample32.yaml --epochs 300 --mask-ratio 0.6 --seed 0 --out runs/msr_ijepa_e300_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_ijepa_e300_s0.pt"
+   ],
+   "sha256": "28dc928bab246db866971e306ac15c94ef3c49ba23a2f64cf464a0cda0af449e",
+   "size_bytes": 13132291,
+   "results": [
+    {
+     "table": 6,
+     "row": "i-JEPA (intra-modal latent)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6509
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_ijepa_e300_s1.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "ijepa",
+   "seed": 1,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_ijepa configs/msr_point4d_resample32.yaml --epochs 300 --mask-ratio 0.6 --seed 1 --out runs/msr_ijepa_e300_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_ijepa_e300_s1.pt"
+   ],
+   "sha256": "e59ab3c6ee0f7bf3514153c431870f5937d1515f94c2e15d47bcfcf4a79aa9ca",
+   "size_bytes": 13132291,
+   "results": [
+    {
+     "table": 6,
+     "row": "i-JEPA (intra-modal latent)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.3455
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_ijepa_e300_s2.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "ijepa",
+   "seed": 2,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_ijepa configs/msr_point4d_resample32.yaml --epochs 300 --mask-ratio 0.6 --seed 2 --out runs/msr_ijepa_e300_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_ijepa_e300_s2.pt"
+   ],
+   "sha256": "fdffebf3c7a14e7a43c5055181fc568d3e4a3be0a322dac6de867da571b3b201",
+   "size_bytes": 13132291,
+   "results": [
+    {
+     "table": 6,
+     "row": "i-JEPA (intra-modal latent)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6182
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_mastpre_e1200_s0.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "mastpre",
+   "seed": 0,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_mastpre configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 0 --out runs/msr_mastpre_e1200_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_mastpre_e1200_s0.pt"
+   ],
+   "sha256": "245579e6136cae8d668915c2a146180cfd86baa6ef7f5d08d83fef129a0cf02d",
+   "size_bytes": 13132553,
+   "results": [
+    {
+     "table": 6,
+     "row": "MaST-Pre (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.32
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_mastpre_e1200_s1.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "mastpre",
+   "seed": 1,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_mastpre configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 1 --out runs/msr_mastpre_e1200_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_mastpre_e1200_s1.pt"
+   ],
+   "sha256": "aa42e55760f7b19811c1a802ee6311c5aa096198ce1be49b471ace639a8821a4",
+   "size_bytes": 13132553,
+   "results": [
+    {
+     "table": 6,
+     "row": "MaST-Pre (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.5418
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_mastpre_e1200_s2.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "mastpre",
+   "seed": 2,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_mastpre configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 2 --out runs/msr_mastpre_e1200_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_mastpre_e1200_s2.pt"
+   ],
+   "sha256": "af146fe46d71c15feb8c06d1b352abda55b10c2ab5d79dbd56f5de34d6a68f79",
+   "size_bytes": 13132553,
+   "results": [
+    {
+     "table": 6,
+     "row": "MaST-Pre (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.48
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_uni4d_e1200_s0.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "uni4d",
+   "seed": 0,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_uni4d configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 0 --out runs/msr_uni4d_e1200_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_uni4d_e1200_s0.pt"
+   ],
+   "sha256": "576273e5a6670ae877e3019cb2159f66b3968d17cfed18d5c621aad7bfb79819",
+   "size_bytes": 13132421,
+   "results": [
+    {
+     "table": 6,
+     "row": "Uni4D (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6509
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_uni4d_e1200_s1.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "uni4d",
+   "seed": 1,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_uni4d configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 1 --out runs/msr_uni4d_e1200_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_uni4d_e1200_s1.pt"
+   ],
+   "sha256": "1b3f4db61697fd961b6d365ec6b1a1403004d00a8865007cdfea51e0f415ddf7",
+   "size_bytes": 13132421,
+   "results": [
+    {
+     "table": 6,
+     "row": "Uni4D (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6218
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/ssl_baselines/msr_uni4d_e1200_s2.pt",
+   "archive": "ssl_baselines",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": null,
+   "mode": "uni4d",
+   "seed": 2,
+   "config": "configs/msr_point4d_resample32.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_uni4d configs/msr_point4d_resample32.yaml --epochs 1200 --mask-ratio 0.75 --seed 2 --out runs/msr_uni4d_e1200_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d_resample32.yaml --encoder checkpoints/ssl_baselines/msr_uni4d_e1200_s2.pt"
+   ],
+   "sha256": "7a75f5abc6f6b6860ae3d960abc3b95204f5c0bcbf61fd67869a2a418292dc93",
+   "size_bytes": 13132421,
+   "results": [
+    {
+     "table": 6,
+     "row": "Uni4D (reimpl., 12x)",
+     "column": "acc. (%)",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7018
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_rawpix_s0.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "rawpix",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher rawpix --seed 0 --out runs/msr_dense_rawpix_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s0.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s0.pt"
+   ],
+   "sha256": "61960a920665add059c46db081bad8943cdc5f1e63a00d2143431df0dbb76638",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6327
+    },
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      13.7351,
+      13.7387,
+      13.747
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_rawpix_s1.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "rawpix",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher rawpix --seed 1 --out runs/msr_dense_rawpix_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s1.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s1.pt"
+   ],
+   "sha256": "00265f863502681cb36df9c3ae8a59be9d21d8066e8b7bbb5f7acdf02a400052",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7309
+    },
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      13.669,
+      13.6786,
+      13.6858
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_rawpix_s2.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "rawpix",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher rawpix --seed 2 --out runs/msr_dense_rawpix_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s2.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_rawpix_s2.pt"
+   ],
+   "sha256": "490c1d9608afd241f63131db01b44fd80b7b1d4c36817fb333ac03fe122bfc5f",
+   "size_bytes": 13132551,
+   "results": [
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.6909
+    },
+    {
+     "table": 3,
+     "row": "raw rendered pixels",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      14.4433,
+      14.4347,
+      14.4337
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-in1k_s0.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-in1k",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-in1k --seed 0 --out runs/msr_dense_vit-in1k_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s0.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s0.pt"
+   ],
+   "sha256": "3eef33276f320cbb56b77c2a86a3123116f5accbf202980bedeeb56ab6bb732e",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet supervised",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7345
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet sup. (supp only)",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      13.1568,
+      13.148,
+      13.1593
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-in1k_s1.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-in1k",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-in1k --seed 1 --out runs/msr_dense_vit-in1k_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s1.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s1.pt"
+   ],
+   "sha256": "2d6b1181a274442057546c1c4ee7cbf492efd5bd8c132a6f1548ba8e90893420",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet supervised",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7964
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet sup. (supp only)",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      15.6554,
+      15.6453,
+      15.6568
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-in1k_s2.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-in1k",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-in1k --seed 2 --out runs/msr_dense_vit-in1k_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s2.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-in1k_s2.pt"
+   ],
+   "sha256": "89f957bd237886e3ed123709f44df4ae10b2995cd65f14e7b665bcfd3020cd8b",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet supervised",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.8291
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 ImageNet sup. (supp only)",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      13.9349,
+      13.9148,
+      13.8967
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-rand_s0.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-rand",
+   "mode": "dense",
+   "seed": 0,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-rand --seed 0 --out runs/msr_dense_vit-rand_s0",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s0.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s0.pt"
+   ],
+   "sha256": "c5e109e31c0a84ebc79133722029c6262f7857ec34a9087cbcb706bbb1cb1c5e",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7636
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      16.0688,
+      16.0814,
+      16.0709
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-rand_s1.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-rand",
+   "mode": "dense",
+   "seed": 1,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-rand --seed 1 --out runs/msr_dense_vit-rand_s1",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s1.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s1.pt"
+   ],
+   "sha256": "e3e40254d5cc8007494359d4d6210d840734cd9804a98f5245d2531231620334",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7818
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      15.7364,
+      15.7237,
+      15.7227
+     ]
+    }
+   ]
+  },
+  {
+   "file": "checkpoints/teacher_capability/msr_dense_vit-rand_s2.pt",
+   "archive": "teacher_capability",
+   "dataset": "MSR-Action3D",
+   "backbone": "point4d",
+   "params": 3277184,
+   "needs_pointnet2": false,
+   "teacher": "vit-rand",
+   "mode": "dense",
+   "seed": 2,
+   "config": "configs/msr_point4d.yaml",
+   "pretrain_command": "python -m cross4d_jepa.engine.pretrain_dense configs/msr_point4d.yaml --teacher vit-rand --seed 2 --out runs/msr_dense_vit-rand_s2",
+   "eval_commands": [
+    "python -m cross4d_jepa.engine.linear_probe configs/msr_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s2.pt",
+    "python scripts/hoi4d_semseg_eval.py configs/hoi4d_semseg_point4d.yaml --encoder checkpoints/teacher_capability/msr_dense_vit-rand_s2.pt"
+   ],
+   "sha256": "58c836ab32d3a6e57ecbef16c050e7341f6a7df985c83a14c042bb7475c3f6a2",
+   "size_bytes": 13132683,
+   "results": [
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "LP acc.",
+     "metric": "MSR/DT4D/NTU linear-probe top-1 acc (frozen encoder, mean-pooled, no standardization)",
+     "value": 0.7818
+    },
+    {
+     "table": 3,
+     "row": "ViT-B/16 untrained",
+     "column": "HOI4D zs mIoU",
+     "metric": "HOI4D zero-shot per-point LP mIoU (%); per probe-head seed 0,1,2 (cell = mean over encoder seeds of head-seed means)",
+     "value": [
+      15.6182,
+      15.6232,
+      15.6152
+     ]
+    }
+   ]
+  }
+ ]
+}

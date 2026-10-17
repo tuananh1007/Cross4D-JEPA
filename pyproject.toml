@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cross4d-jepa"
+version = "1.0.0"
+description = "Dense cross-modal correspondence distillation from a frozen 2D foundation model into a 4D point-cloud encoder (WACV 2027)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "torch>=2.2",
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "einops>=0.7",
+    # Frozen teachers (DINOv2 / DINOv3 / V-JEPA 2 / VideoMAE V2 / ViT), loaded once per
+    # pretraining run to build the per-point targets. transformers 5.x drops the
+    # Dinov2 / VideoMAE V2 code paths used here; DINOv3 needs >= 4.56.
+    "transformers>=4.56,<5",
+    "huggingface_hub",
+    "safetensors",
+    # VideoMAE V2's remote modeling code imports these.
+    "timm>=1.0",
+    "easydict",
+]
+
+[project.optional-dependencies]
+# NTU RGB+D / HOI4D preprocessing (depth maps -> point clouds).
+preprocess = ["pillow>=10.0", "imageio>=2.34"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+c4d-pretrain = "cross4d_jepa.engine.pretrain_dense:main"
+c4d-probe = "cross4d_jepa.engine.linear_probe:main"
+c4d-preprocess-msr = "cross4d_jepa.data.datasets.msr_preprocess:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cross4d_jepa"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
