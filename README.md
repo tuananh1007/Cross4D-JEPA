@@ -6,7 +6,7 @@ Trung Thanh Nguyen<sup>1</sup>, Hai Nguyen-Truong<sup>2</sup>, Tu Vo<sup>3</sup>
 
 <sup>1</sup>Nagoya University &nbsp; <sup>2</sup>Northeastern University &nbsp; <sup>3</sup>KC Machine Learning Lab &nbsp; <sup>4</sup>University of Science, VNU-HCM &nbsp; <sup>5</sup>University of California, Los Angeles
 
-[Project page](https://tuananh1007.github.io/Cross4D-JEPA/) · [Checkpoints](https://github.com/tuananh1007/Cross4D-JEPA/releases/tag/v1.0) · [BibTeX](#citation)
+[Paper (arXiv)](https://arxiv.org/abs/2607.00514) · [Project page](https://tuananh1007.github.io/Cross4D-JEPA/) · [Checkpoints](https://github.com/tuananh1007/Cross4D-JEPA/releases/tag/v1.0) · [BibTeX](#citation)
 
 Cross4D-JEPA pretrains a 4D point-cloud encoder by distilling a **frozen 2D foundation
 model** (DINOv2 by default) **densely**. Each frame of a point-cloud clip is rendered from
